@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+  title: User Session API
+  description: API for user registration, login, and session management
+  version: 1.0.0
+paths:
+  /session/register:
+    post:
+      summary: Register a new user
+      responses:
+        "200":
+          description: Successful registration
+          content:
+            application/json:
+              example:
+                $ref: "#/components/examples/RegisterResponse"
+        "500":
+          description: Failed registration
+          content:
+            text/plain:
+              example: failed Register
+
+  /session/failedRegister:
+    get:
+      summary: Endpoint for failed registration
+      responses:
+        "200":
+          description: Failed registration response
+          content:
+            text/plain:
+              example: failed Register
+
+  /session/login:
+    post:
+      summary: User login
+      responses:
+        "200":
+          description: Successful login
+          content:
+            application/json:
+              example:
+                $ref: "#/components/examples/LoginResponse"
+        "500":
+          description: Failed login
+          content:
+            text/plain:
+              example: failed Login
+
+  /session/failedLogin:
+    get:
+      summary: Endpoint for failed login
+      responses:
+        "200":
+          description: Failed login response
+          content:
+            text/plain:
+              example: failed Login
+
+  /session/getCurrentUser:
+    get:
+      summary: Get current user information
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example:
+                $ref: "#/components/examples/CurrentUserResponse"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The user's ID
+        name:
+          type: string
+          description: The user's name
+        role:
+          type: string
+          description: The user's role
+        email:
+          type: string
+          description: The user's email
+
+  examples:
+    RegisterResponse:
+      status: success
+      message: User registered
+      payload: user_id_here
+
+    LoginResponse:
+      status: success
+      payload:
+        id: user_id_here
+        name: user_name_here
+        role: user_role_here
+        email: user_email_here
+
+    CurrentUserResponse:
+      id: user_id_here
+      name: user_name_here
+      role: user_role_here
+      email: user_email_here

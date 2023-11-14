@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+  title: Courses API
+  description: API for managing courses
+  version: 1.0.0
+paths:
+  /api/courses:
+    get:
+      summary: Get all courses
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example:
+                $ref: "#/components/examples/GetCoursesResponse"
+    post:
+      summary: Create a new course
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCourseRequest"
+              examples:
+                example1:
+                  value:
+                    title: New Course
+                    description: Description for New Course
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              example:
+                $ref: "#/components/examples/CreateCourseResponse"
+components:
+  schemas:
+    CreateCourseRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the course
+        description:
+          type: string
+          description: The description of the course
+      required:
+        - title
+        - description
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the course
+        title:
+          type: string
+          description: The title of the course
+        description:
+          type: string
+          description: The description of the course
+  examples:
+    CreateCourseResponse:
+      status: success
+      payload:
+        id: 3
+        title: New Course
+        description: Description for New Course
+    GetCoursesResponse:
+      status: success
+      payload:
+        - id: 1
+          title: Course 1
+          description: Description for Course 1
+        - id: 2
+          title: Course 2
+          description: Description for Course 2
+    CreateCourseRequest:
+      value:
+        title: New Course
+        description: Description for New Course

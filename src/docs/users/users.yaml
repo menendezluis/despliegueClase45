@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  title: Users API
+  description: API for managing users and courses
+  version: 1.0.0
+paths:
+  /api/users:
+    get:
+      summary: Get all users
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example:
+                $ref: "#/components/examples/GetUsersResponse"
+        "500":
+          description: Failed to get users
+          content:
+            text/plain:
+              example: Failed to get users due to internal error
+
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+              examples:
+                example1:
+                  value:
+                    first_name: John
+                    last_name: Doe
+                    dni: 123456789
+                    email: john.doe@example.com
+                    birthDate: "01-01-1990"
+                    gender: Male
+      responses:
+        "200":
+          description: Successful user creation
+          content:
+            application/json:
+              example:
+                $ref: "#/components/examples/CreateUserResponse"
+        "400":
+          description: Incomplete values provided
+          content:
+            application/json:
+              example: Incomplete values provided
+
+  /api/users/:uid/courses/:cid:
+    post:
+      summary: Register user to a course
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: The user's ID
+          schema:
+            type: string
+        - name: cid
+          in: path
+          required: true
+          description: The course's ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful registration
+          content:
+            application/json:
+              example:
+                $ref: "#/components/examples/RegisterUserToCourseResponse"
+        "400":
+          description: User already registered in this course
+          content:
+            application/json:
+              example: User already registered in this course
+        "404":
+          description: User or course not found
+          content:
+            application/json:
+              example: User not found or Course not found
+
+components:
+  schemas:
+    CreateUserRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: The first name of the user
+        last_name:
+          type: string
+          description: The last name of the user
+        dni:
+          type: string
+          description: The user's DNI
+        email:
+          type: string
+          description: The email of the user
+        birthDate:
+          type: string
+          description: The birth date of the user
+        gender:
+          type: string
+          description: The gender of the user
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The user's ID
+        first_name:
+          type: string
+          description: The first name of the user
+        last_name:
+          type: string
+          description: The last name of the user
+        dni:
+          type: string
+          description: The user's DNI
+        email:
+          type: string
+          description: The email of the user
+        birthDate:
+          type: string
+          description: The birth date of the user
+        gender:
+          type: string
+          description: The gender of the user
+        courses:
+          type: array
+          items:
+            type: string
+          description: List of course IDs the user is registered in
+
+    Course:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The course's ID
+        title:
+          type: string
+          description: The title of the course
+        description:
+          type: string
+          description: The description of the course
+        students:
+          type: array
+          items:
+            type: string
+          description: List of user IDs registered in the course
+
+  examples:
+    GetUsersResponse:
+      status: success
+      payload:
+        - _id: user_id_here
+          first_name: John
+          last_name: Doe
+          dni: 123456789
+          email: john.doe@example.com
+          birthDate: "01-01-1990"
+          gender: Male
+        - _id: another_user_id_here
+          first_name: Jane
+          last_name: Doe
+          dni: 987654321
+          email: jane.doe@example.com
+          birthDate: "02-02-1995"
+          gender: Female
+
+    CreateUserResponse:
+      status: success
+      payload:
+        _id: user_id_here
+        first_name: John
+        last_name: Doe
+        dni: 123456789
+        email: john.doe@example.com
+        birthDate: "01-01-1990"
+        gender: Male
+        courses: []
+
+    RegisterUserToCourseResponse:
+      status: success
+      message: User added to course
